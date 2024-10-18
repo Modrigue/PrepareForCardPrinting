@@ -138,9 +138,11 @@ def processVersoFile(processDir, versoFilePath):
     print("Copying verso files", versoFilePath, " in", processDir, "...")
     print()
 
+    dstFileName, dstFileExt = os.path.splitext(versoFilePath)
+
     processDirStr = convertToPythonPath(processDir)
 
-        # Convert files in directory
+    # Convert files in directory
     nbTotal  = 0
     nbCopied = 0
     for dirname, dirnames, filenames in os.walk(processDirStr):
@@ -170,11 +172,13 @@ def processVersoFile(processDir, versoFilePath):
                 # Create verso file path
                 srcFileName = srcFileName[:-len(SUFFIX_RECTO)]
                 #print("Original file name:", srcFileName)
-                dstFileNameExt = srcFileName + SUFFIX_VERSO + srcFileExt
+                dstFileNameExt = srcFileName + SUFFIX_VERSO + dstFileExt
                 dstFilePath = os.path.join(dirname, dstFileNameExt)
 
                 # Skip if verso file already exists
-                if (os.path.isfile(dstFilePath)):
+                dstFileNameWithSrcExt = srcFileName + SUFFIX_VERSO + srcFileExt
+                dstFilePathWithSrcExt = os.path.join(dirname, dstFileNameWithSrcExt)
+                if (os.path.isfile(dstFilePath) or os.path.isfile(dstFilePathWithSrcExt)):
                     print("Skipping", dstFilePath)
                     continue
 
